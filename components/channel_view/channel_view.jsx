@@ -3,7 +3,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import deferComponentRender from 'components/deferComponentRender';
 import ChannelHeader from 'components/channel_header';
@@ -11,7 +11,7 @@ import CreatePost from 'components/create_post';
 import FileUploadOverlay from 'components/file_upload_overlay';
 import PostView from 'components/post_view';
 import TutorialView from 'components/tutorial';
-import {clearMarks, mark, measure, trackEvent} from 'actions/diagnostics_actions.jsx';
+import { clearMarks, mark, measure, trackEvent } from 'actions/diagnostics_actions.jsx';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
 
 export default class ChannelView extends React.PureComponent {
@@ -51,15 +51,15 @@ export default class ChannelView extends React.PureComponent {
         const focusedPostId = props.match.params.postid;
 
         if (props.match.url !== state.url && props.channelId !== state.channelId) {
-            updatedState = {deferredPostView: ChannelView.createDeferredPostView(), url: props.match.url, focusedPostId};
+            updatedState = { deferredPostView: ChannelView.createDeferredPostView(), url: props.match.url, focusedPostId };
         }
 
         if (props.channelId !== state.channelId) {
-            updatedState = {...updatedState, channelId: props.channelId, focusedPostId};
+            updatedState = { ...updatedState, channelId: props.channelId, focusedPostId };
         }
 
         if (focusedPostId && focusedPostId !== state.focusedPostId) {
-            updatedState = {...updatedState, focusedPostId};
+            updatedState = { ...updatedState, focusedPostId };
         }
 
         if (Object.keys(updatedState).length) {
@@ -101,10 +101,10 @@ export default class ChannelView extends React.PureComponent {
             ]);
 
             if (dur1 !== -1) {
-                trackEvent('performance', 'channel_switch', {duration: Math.round(dur1)});
+                trackEvent('performance', 'channel_switch', { duration: Math.round(dur1) });
             }
             if (dur2 !== -1) {
-                trackEvent('performance', 'team_switch', {duration: Math.round(dur2)});
+                trackEvent('performance', 'team_switch', { duration: Math.round(dur2) });
             }
             if (this.props.channelIsArchived && !this.props.viewArchivedChannels) {
                 this.props.actions.goToLastViewedChannel();
@@ -113,7 +113,8 @@ export default class ChannelView extends React.PureComponent {
     }
 
     render() {
-        const {channelIsArchived} = this.props;
+        const CUSTOM_LAYER_ROUTES = ['manage-sales', 'manage-learning', 'design-course-site', 'market-sell', 'live-classes', 'manage-students', 'advanced-reports']
+        const { channelIsArchived } = this.props;
         if (this.props.showTutorial) {
             return (
                 <TutorialView
@@ -174,6 +175,8 @@ export default class ChannelView extends React.PureComponent {
         }
 
         const DeferredPostView = this.state.deferredPostView;
+        console.log(this.props)
+        const { identifier } = this.props.match.params
 
         return (
             <div
@@ -181,15 +184,20 @@ export default class ChannelView extends React.PureComponent {
                 id='app-content'
                 className='app__content'
             >
-                <FileUploadOverlay overlayType='center'/>
-                <ChannelHeader
-                    channelId={this.props.channelId}
-                />
-                <DeferredPostView
-                    channelId={this.props.channelId}
-                    focusedPostId={this.state.focusedPostId}
-                />
-                {createPost}
+                {
+                    CUSTOM_LAYER_ROUTES.includes(identifier) ? <iframe src="https://coursebook.in/" width="100%" height="100%" /> :
+                        <>
+                            <FileUploadOverlay overlayType='center' />
+                            <ChannelHeader
+                                channelId={this.props.channelId}
+                            />
+                            <DeferredPostView
+                                channelId={this.props.channelId}
+                                focusedPostId={this.state.focusedPostId}
+                            />
+                            {createPost}
+                        </>
+                }
             </div>
         );
     }

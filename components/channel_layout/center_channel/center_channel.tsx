@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import React from 'react';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import classNames from 'classnames';
 
 import PermalinkView from 'components/permalink_view';
@@ -43,12 +43,14 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                 returnTo: prevState.lastReturnTo,
             };
         }
-        return {lastReturnTo: nextProps.location.pathname,
+        return {
+            lastReturnTo: nextProps.location.pathname,
         };
     }
 
+
     render() {
-        const {lastChannelPath} = this.props;
+        const { lastChannelPath } = this.props;
         const url = this.props.match.url;
         return (
             <div
@@ -61,7 +63,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
             >
                 <div className='row header'>
                     <div id='navbar_wrapper'>
-                        <ChannelHeaderMobile/>
+                        <ChannelHeaderMobile />
                     </div>
                 </div>
                 <div className='row main'>
@@ -79,7 +81,7 @@ export default class CenterChannel extends React.PureComponent<Props, State> {
                             path={['/:team/:path(channels|messages)/:identifier/:postid', '/:team/:path(channels|messages)/:identifier']}
                             component={ChannelIdentifierRouter}
                         />
-                        <Redirect to={lastChannelPath}/>
+                        <Redirect to={lastChannelPath} />
                     </Switch>
                 </div>
             </div>
